@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -110,6 +111,7 @@ namespace SpeechClient
                         {
                             Thread.Sleep(2000);
                             Speak($"{Settings1.Default.HomeBot}, call William to get {messageArray[0]}");
+                            CallDiscord();
                         }
                     }
                     catch (Exception ex)
@@ -123,6 +125,29 @@ namespace SpeechClient
                     }
                 }
             }
+        }
+
+        private static void CallDiscord()
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var uri = new Uri(Settings1.Default.DiscordUrl);
+                    client.Timeout = TimeSpan.FromSeconds(5);
+                    client.BaseAddress = new Uri($"{uri.Scheme}://{uri.Authority}");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.GetAsync(uri.AbsoluteUri);
+
+                }
+            }
+            catch(Exception ex)
+            {
+                var errorMessage = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                LogMessage($"Error occurred sending to discord: {errorMessage}");
+            }
+           
         }
 
         private static void Speak(string message)

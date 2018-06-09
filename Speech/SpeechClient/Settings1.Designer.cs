@@ -73,13 +73,25 @@ namespace SpeechClient {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Google")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Ok Google")]
         public string HomeBot {
             get {
                 return ((string)(this["HomeBot"]));
             }
             set {
                 this["HomeBot"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8080/bier")]
+        public string DiscordUrl {
+            get {
+                return ((string)(this["DiscordUrl"]));
+            }
+            set {
+                this["DiscordUrl"] = value;
             }
         }
     }
