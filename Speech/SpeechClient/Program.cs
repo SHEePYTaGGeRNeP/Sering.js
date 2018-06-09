@@ -12,8 +12,6 @@ namespace SpeechClient
     {
         private static readonly SpeechSynthesizer _speechSynthesizer = new SpeechSynthesizer();
 
-        private const string Url = "http://localhost:60983/api/speech/message/";
-
         static void Main(string[] args)
         {
             InitializeVoice();
@@ -58,7 +56,7 @@ namespace SpeechClient
             LogMessage("Running client");
             using (var client = new HttpClient())
             {
-                var uri = new Uri(Url);
+                var uri = new Uri(Settings1.Default.ServiceUrl);
                 client.Timeout = TimeSpan.FromDays(1);
                 client.BaseAddress = new Uri($"{uri.Scheme}://{uri.Authority}");
                 client.DefaultRequestHeaders.Accept.Clear();

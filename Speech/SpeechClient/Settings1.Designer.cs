@@ -58,5 +58,17 @@ namespace SpeechClient {
                 this["VoiceVolume"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:60983/api/speech/message/")]
+        public string ServiceUrl {
+            get {
+                return ((string)(this["ServiceUrl"]));
+            }
+            set {
+                this["ServiceUrl"] = value;
+            }
+        }
     }
 }

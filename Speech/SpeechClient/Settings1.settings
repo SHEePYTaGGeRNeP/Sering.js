@@ -11,5 +11,8 @@
     <Setting Name="VoiceVolume" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">100</Value>
     </Setting>
+    <Setting Name="ServiceUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://localhost:60983/api/speech/message/</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
