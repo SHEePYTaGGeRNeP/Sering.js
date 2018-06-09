@@ -20,7 +20,9 @@ client.on('message', msg => {
     return;
   }
   //.find(x => !x.username.endsWith('bot'))
-  msg.channel.sendMessage(msg.channel.members.random(1).toString() + messageSuffix);
+  var msgText = msg.channel.members.random(1).toString() + messageSuffix;
+  sys.puts(msgText)
+  msg.channel.sendMessage(msgText);
 
 });
 
