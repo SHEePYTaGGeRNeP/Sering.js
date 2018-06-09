@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Speech.Synthesis;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SpeechClient
 {
@@ -71,39 +72,50 @@ namespace SpeechClient
                         // client.DefaultRequestHeaders.Add("apiKey", apiKey);
                         //var response = client.GetAsync(uri.AbsoluteUri, new StringContent(message, Encoding.UTF8, "application/json")).Result;
                         var response = client.GetAsync(uri.AbsoluteUri).Result;
-                        var messageContent = response.Content.ReadAsStringAsync().Result;
+                        var messageContent = response.Content.ReadAsStringAsync().Result.Replace(@"""", "");
 
-                        if (response.StatusCode == HttpStatusCode.OK)
+                        LogMessage($"Message received: {messageContent}");
+
+                        if (response.StatusCode != HttpStatusCode.OK)
+                            continue;
+
+                        if (messageContent == "empty")
                         {
-                            if (messageContent == "empty" || messageContent == @"""empty""")
+                            LogMessage("No message available");
+                            continue;
+                        }
+
+                        var substanceVolume = string.Empty;
+                            
+                        var messageArray = messageContent.ToLowerInvariant().Split('_');
+
+                        substanceVolume = messageArray.Length == 1 
+                            ? "full" 
+                            : messageArray[1];
+                                
+                        switch (messageArray[0])
+                        {
+                            case @"beer":
+                            case @"cola":
+                            case @"jus":
                             {
-                                LogMessage("No message available");
-                                continue;
+                                Speak($"The glass contains {messageArray[0]} and is {substanceVolume}");
+                                break;
                             }
-
-                            switch (messageContent.ToLowerInvariant())
+                            default:
                             {
-                                case @"beer":
-                                case @"cola":
-                                case @"orange":
-                                case @"""beer""":
-                                case @"""cola""":
-                                case @"""orange""":
-                                    {
-                                        Speak($"The glass contains {messageContent}");
-                                        break;
-                                    }
-                                default:
-                                    {
-                                        Speak("The glass contains an unknown substance");
-                                        break;
-                                    }
-
+                                Speak("The glass contains an unknown substance and has an unknown volume");
+                                break;
                             }
-
-                            // return JsonConvert.DeserializeObject<SpeakMessage>(messageContent);
 
                         }
+
+                        //if (substanceVolume == "empty")
+                        //{
+                        //    Speak("Alexa, call William to get beer");
+                        //}
+
+                        // return JsonConvert.DeserializeObject<SpeakMessage>(messageContent);
                     }
                     catch (Exception ex)
                     {
@@ -121,7 +133,7 @@ namespace SpeechClient
         private static void Speak(string message)
         {
             LogMessage($"Speak {message}");
-            _speechSynthesizer.SpeakAsync(message);
+             _speechSynthesizer.SpeakAsync(message);
         }
 
         private static void LogMessage(string message)
