@@ -26,8 +26,8 @@ namespace SpeechService.Controllers
 
             try
             {
-                speechMessages.TryAdd(DateTime.UtcNow, $"beverageType_volume");
-                hueMessages.TryAdd(DateTime.UtcNow, $"beverageType_volume");
+                speechMessages.TryAdd(DateTime.UtcNow, beverageType + "_" + volume);
+                hueMessages.TryAdd(DateTime.UtcNow, beverageType + "_" + volume);
                 return Ok();
             }
             catch (Exception ex)
@@ -56,6 +56,8 @@ namespace SpeechService.Controllers
                 if (speechMessages.Count > 0)
                 {
                     speechMessage = speechMessages.OrderByDescending(x => x.Key).FirstOrDefault();
+                    var test = "";
+                    speechMessages.TryRemove(speechMessage.Key, out test);
                 } else
                 {
                     return Ok("empty");
@@ -83,7 +85,20 @@ namespace SpeechService.Controllers
 
             try
             {
-                return Ok("orange");
+                KeyValuePair<DateTime, string> hueMessage;
+
+                if (hueMessages.Count > 0)
+                {
+                    hueMessage = hueMessages.OrderByDescending(x => x.Key).FirstOrDefault();
+                    var test = "";
+                    hueMessages.TryRemove(hueMessage.Key, out test);
+                }
+                else
+                {
+                    return Ok("empty");
+                }
+
+                return Ok(hueMessage.Value);
             }
             catch (Exception ex)
             {
