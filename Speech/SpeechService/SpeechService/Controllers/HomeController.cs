@@ -14,6 +14,7 @@ namespace SpeechService.Controllers
     public class HomeController : ApiController
     {
  
+     //   static List<>
         //[Route("insert")]
         //[HttpPost]
         //public async Task Insert()
@@ -23,7 +24,7 @@ namespace SpeechService.Controllers
 
         [Route("message")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetSpeechMessage()
+        public async Task<IHttpActionResult> GetMessage()
         {
            HttpResponseMessage message;
 
