@@ -48,7 +48,7 @@ namespace SpeechService.Controllers
 
             try
             {
-                return Ok("test");
+                return Ok("The glass is half full, not half empty");
             }
             catch (Exception ex)
             {

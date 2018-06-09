@@ -1,5 +1,4 @@
 using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -13,23 +12,17 @@ namespace SpeechClient
     {
         private static readonly SpeechSynthesizer _speechSynthesizer = new SpeechSynthesizer();
 
-        private const string Url = "https://tbd";
-
         static void Main(string[] args)
         {
-            
             InitializeVoice();
 
             RunClient();
-
-
         }
 
         private static void InitializeVoice()
         {
             LogMessage("Initializing voice");
-            ReadOnlyCollection<InstalledVoice> voices =
-                _speechSynthesizer.GetInstalledVoices();
+            var voices = _speechSynthesizer.GetInstalledVoices();
 
             if (!string.IsNullOrWhiteSpace(Settings1.Default.VoiceGender) &&
                 voices.Any(v => v.VoiceInfo.Name == Settings1.Default.VoiceGender))
@@ -63,7 +56,7 @@ namespace SpeechClient
             LogMessage("Running client");
             using (var client = new HttpClient())
             {
-                var uri = new Uri(Url);
+                var uri = new Uri(Settings1.Default.ServiceUrl);
                 client.Timeout = TimeSpan.FromDays(1);
                 client.BaseAddress = new Uri($"{uri.Scheme}://{uri.Authority}");
                 client.DefaultRequestHeaders.Accept.Clear();
@@ -73,16 +66,33 @@ namespace SpeechClient
                 {
                     try
                     {
-                        LogMessage("Polling for messages...");
+                        LogMessage("Polling for new message...");
                         // client.DefaultRequestHeaders.Add("apiKey", apiKey);
                         //var response = client.GetAsync(uri.AbsoluteUri, new StringContent(message, Encoding.UTF8, "application/json")).Result;
                         var response = client.GetAsync(uri.AbsoluteUri).Result;
                         var messageContent = response.Content.ReadAsStringAsync().Result;
 
                         if (response.StatusCode == HttpStatusCode.OK)
-                        {
+                        { 
+                            switch (messageContent.ToLowerInvariant())
+                            {
+                                case "beer":
+                                case "cola":
+                                case "orange":
+                                    {
+                                        Speak($"The glass contains {messageContent}");
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        Speak("The glass contains an unknown substance");
+                                        break;
+                                    }
+
+                            }
+
                             // return JsonConvert.DeserializeObject<SpeakMessage>(messageContent);
-                            Speak(messageContent);
+
                         }
                     }
                     catch (Exception ex)
