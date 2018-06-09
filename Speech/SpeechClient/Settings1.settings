@@ -11,5 +11,11 @@
     <Setting Name="VoiceVolume" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">100</Value>
     </Setting>
+    <Setting Name="ServiceUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://speechservice1.azurewebsites.net/api/speech/speechmessage/</Value>
+    </Setting>
+    <Setting Name="HomeBot" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Google</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

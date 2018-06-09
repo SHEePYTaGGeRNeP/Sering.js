@@ -1,5 +1,4 @@
 using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -13,23 +12,17 @@ namespace SpeechClient
     {
         private static readonly SpeechSynthesizer _speechSynthesizer = new SpeechSynthesizer();
 
-        private const string Url = "https://tbd";
-
         static void Main(string[] args)
         {
-            
             InitializeVoice();
 
             RunClient();
-
-
         }
 
         private static void InitializeVoice()
         {
             LogMessage("Initializing voice");
-            ReadOnlyCollection<InstalledVoice> voices =
-                _speechSynthesizer.GetInstalledVoices();
+            var voices = _speechSynthesizer.GetInstalledVoices();
 
             if (!string.IsNullOrWhiteSpace(Settings1.Default.VoiceGender) &&
                 voices.Any(v => v.VoiceInfo.Name == Settings1.Default.VoiceGender))
@@ -63,8 +56,8 @@ namespace SpeechClient
             LogMessage("Running client");
             using (var client = new HttpClient())
             {
-                var uri = new Uri(Url);
-                client.Timeout = TimeSpan.FromDays(1);
+                var uri = new Uri(Settings1.Default.ServiceUrl);
+                client.Timeout = TimeSpan.FromSeconds(5);
                 client.BaseAddress = new Uri($"{uri.Scheme}://{uri.Authority}");
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -73,24 +66,61 @@ namespace SpeechClient
                 {
                     try
                     {
-                        LogMessage("Polling for messages...");
-                        // client.DefaultRequestHeaders.Add("apiKey", apiKey);
-                        //var response = client.GetAsync(uri.AbsoluteUri, new StringContent(message, Encoding.UTF8, "application/json")).Result;
+                        LogMessage("Polling for new message...");
                         var response = client.GetAsync(uri.AbsoluteUri).Result;
-                        var messageContent = response.Content.ReadAsStringAsync().Result;
+                        var messageContent = response.Content.ReadAsStringAsync().Result.Replace(@"""", "");
 
-                        if (response.StatusCode == HttpStatusCode.OK)
+                        LogMessage($"Message received: {messageContent}");
+
+                        if (response.StatusCode != HttpStatusCode.OK)
+                            continue;
+
+                        if (messageContent == "empty")
                         {
-                            // return JsonConvert.DeserializeObject<SpeakMessage>(messageContent);
-                            Speak(messageContent);
+                            LogMessage("No message available");
+                            continue;
+                        }
+
+                        var substanceVolume = string.Empty;
+                            
+                        var messageArray = messageContent.ToLowerInvariant().Split('_');
+
+                        substanceVolume = messageArray.Length == 1 
+                            ? "full" 
+                            : messageArray[1];
+                                
+                        switch (messageArray[0])
+                        {
+                            case @"beer":
+                            case @"cola":
+                            case @"jus":
+                            {
+                                Speak($"The glass contains {messageArray[0]} and is {substanceVolume}");
+                                break;
+                            }
+                            default:
+                            {
+                                Speak("The glass contains an unknown substance and has an unknown volume");
+                                break;
+                            }
+
+                        }
+
+                        if (substanceVolume == "empty")
+                        {
+                            Thread.Sleep(2000);
+                            Speak($"{Settings1.Default.HomeBot}, call William to get {messageArray[0]}");
                         }
                     }
                     catch (Exception ex)
                     {
-                        LogMessage($"Error occurred: {ex.Message}");
+                        var errorMessage = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                        LogMessage($"Error occurred: {errorMessage}");
                     }
-
-                    Thread.Sleep(3000);
+                    finally
+                    {
+                        Thread.Sleep(3000);
+                    }
                 }
             }
         }
@@ -98,7 +128,7 @@ namespace SpeechClient
         private static void Speak(string message)
         {
             LogMessage($"Speak {message}");
-            _speechSynthesizer.SpeakAsync(message);
+             _speechSynthesizer.SpeakAsync(message);
         }
 
         private static void LogMessage(string message)

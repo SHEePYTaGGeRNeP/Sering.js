@@ -58,5 +58,29 @@ namespace SpeechClient {
                 this["VoiceVolume"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://speechservice1.azurewebsites.net/api/speech/speechmessage/")]
+        public string ServiceUrl {
+            get {
+                return ((string)(this["ServiceUrl"]));
+            }
+            set {
+                this["ServiceUrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Google")]
+        public string HomeBot {
+            get {
+                return ((string)(this["HomeBot"]));
+            }
+            set {
+                this["HomeBot"] = value;
+            }
+        }
     }
 }
