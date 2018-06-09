@@ -1,12 +1,10 @@
 using System;
-using System.CodeDom;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Speech.Synthesis;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace SpeechClient
 {
@@ -69,8 +67,6 @@ namespace SpeechClient
                     try
                     {
                         LogMessage("Polling for new message...");
-                        // client.DefaultRequestHeaders.Add("apiKey", apiKey);
-                        //var response = client.GetAsync(uri.AbsoluteUri, new StringContent(message, Encoding.UTF8, "application/json")).Result;
                         var response = client.GetAsync(uri.AbsoluteUri).Result;
                         var messageContent = response.Content.ReadAsStringAsync().Result.Replace(@"""", "");
 
@@ -110,12 +106,11 @@ namespace SpeechClient
 
                         }
 
-                        //if (substanceVolume == "empty")
-                        //{
-                        //    Speak("Alexa, call William to get beer");
-                        //}
-
-                        // return JsonConvert.DeserializeObject<SpeakMessage>(messageContent);
+                        if (substanceVolume == "empty")
+                        {
+                            Thread.Sleep(2000);
+                            Speak($"Alexa, call William to get {messageArray[0]}");
+                        }
                     }
                     catch (Exception ex)
                     {

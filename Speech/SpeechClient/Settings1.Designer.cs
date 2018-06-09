@@ -61,7 +61,7 @@ namespace SpeechClient {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://speechservice1.azurewebsites.net/api/speech/speechmessage/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://speechservice1.azurewebsites.net/api/speech/speechmessage/")]
         public string ServiceUrl {
             get {
                 return ((string)(this["ServiceUrl"]));
