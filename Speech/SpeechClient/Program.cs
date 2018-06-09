@@ -1,4 +1,5 @@
 using System;
+using System.CodeDom;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -73,12 +74,21 @@ namespace SpeechClient
                         var messageContent = response.Content.ReadAsStringAsync().Result;
 
                         if (response.StatusCode == HttpStatusCode.OK)
-                        { 
+                        {
+                            if (messageContent == "empty" || messageContent == @"""empty""")
+                            {
+                                LogMessage("No message available");
+                                continue;
+                            }
+
                             switch (messageContent.ToLowerInvariant())
                             {
-                                case "beer":
-                                case "cola":
-                                case "orange":
+                                case @"beer":
+                                case @"cola":
+                                case @"orange":
+                                case @"""beer""":
+                                case @"""cola""":
+                                case @"""orange""":
                                     {
                                         Speak($"The glass contains {messageContent}");
                                         break;
@@ -97,10 +107,13 @@ namespace SpeechClient
                     }
                     catch (Exception ex)
                     {
-                        LogMessage($"Error occurred: {ex.Message}");
+                        var errorMessage = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                        LogMessage($"Error occurred: {errorMessage}");
                     }
-
-                    Thread.Sleep(3000);
+                    finally
+                    {
+                        Thread.Sleep(3000);
+                    }
                 }
             }
         }
