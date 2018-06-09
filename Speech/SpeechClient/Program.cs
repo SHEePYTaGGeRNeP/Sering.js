@@ -57,7 +57,7 @@ namespace SpeechClient
             using (var client = new HttpClient())
             {
                 var uri = new Uri(Settings1.Default.ServiceUrl);
-                client.Timeout = TimeSpan.FromDays(1);
+                client.Timeout = TimeSpan.FromSeconds(5);
                 client.BaseAddress = new Uri($"{uri.Scheme}://{uri.Authority}");
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -119,7 +119,7 @@ namespace SpeechClient
                     }
                     finally
                     {
-                        Thread.Sleep(6000);
+                        Thread.Sleep(3000);
                     }
                 }
             }
