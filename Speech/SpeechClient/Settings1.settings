@@ -12,7 +12,7 @@
       <Value Profile="(Default)">100</Value>
     </Setting>
     <Setting Name="ServiceUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://localhost:60983/api/speech/message/</Value>
+      <Value Profile="(Default)">http://speechservice1.azurewebsites.net/api/speech/speechmessage/</Value>
     </Setting>
   </Settings>
 </SettingsFile>
