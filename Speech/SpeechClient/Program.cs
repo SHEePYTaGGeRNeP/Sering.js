@@ -129,6 +129,8 @@ namespace SpeechClient
 
         private static void CallDiscord()
         {
+            LogMessage("Call Discord");
+
             try
             {
                 using (var client = new HttpClient())
@@ -138,7 +140,7 @@ namespace SpeechClient
                     client.BaseAddress = new Uri($"{uri.Scheme}://{uri.Authority}");
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.GetAsync(uri.AbsoluteUri);
+                    var x = client.GetAsync(uri.AbsoluteUri).Result;
 
                 }
             }
