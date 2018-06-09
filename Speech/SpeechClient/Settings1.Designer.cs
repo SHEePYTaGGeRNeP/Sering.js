@@ -70,5 +70,17 @@ namespace SpeechClient {
                 this["ServiceUrl"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Google")]
+        public string HomeBot {
+            get {
+                return ((string)(this["HomeBot"]));
+            }
+            set {
+                this["HomeBot"] = value;
+            }
+        }
     }
 }

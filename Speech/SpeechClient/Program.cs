@@ -109,7 +109,7 @@ namespace SpeechClient
                         if (substanceVolume == "empty")
                         {
                             Thread.Sleep(2000);
-                            Speak($"Alexa, call William to get {messageArray[0]}");
+                            Speak($"{Settings1.Default.HomeBot}, call William to get {messageArray[0]}");
                         }
                     }
                     catch (Exception ex)
