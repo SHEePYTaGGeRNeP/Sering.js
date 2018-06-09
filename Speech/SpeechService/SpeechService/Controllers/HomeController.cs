@@ -29,7 +29,7 @@ namespace SpeechService.Controllers
 
             try
             {
-                return Ok(new SpeechResponse("hallo"));
+                return Ok("test");
             }
             catch (Exception ex)
             {
