@@ -19,7 +19,8 @@ client.on('message', msg => {
     msg.reply('pong');
     return;
   }
-  msg.channel.sendMessage(msg.channel.members.find(x => !x.username.endsWith('bot')).random(1).toString() + messageSuffix);
+  //.find(x => !x.username.endsWith('bot'))
+  msg.channel.sendMessage(msg.channel.members.random(1).toString() + messageSuffix);
 
 });
 
