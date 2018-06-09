@@ -25,7 +25,7 @@ namespace SpeechService.Controllers
 
             try
             {
-
+                messages.TryAdd(DateTime.UtcNow, cognitiveMessage);
                 return Ok();
             }
             catch (Exception ex)
