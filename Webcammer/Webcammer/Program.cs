@@ -23,18 +23,18 @@ namespace Webcammer
             {
                 ConsoleWriter.WriteColoredText(wc.ToString(), ConsoleColor.DarkBlue, ConsoleColor.Yellow);
             }
-            Webcam cam2 = WebcamManager.Enumerate().First(x => x.ToString().ToUpper().Contains("LIFE"));
-            ConsoleWriter.WriteColoredText("Using webcam: " + cam2, ConsoleColor.Green, ConsoleColor.DarkYellow);            
+            Webcam cam2 = WebcamManager.Enumerate().First(x => x.ToString().ToUpper().Contains("LIFE"))
+                ?? WebcamManager.Enumerate().First();
+            ConsoleWriter.WriteColoredText("Using webcam: " + cam2, ConsoleColor.Green, ConsoleColor.DarkYellow);
+            ConsoleWriter.WriteQuestionMessage("Interval in seconds: ", false);
+            if (!Double.TryParse(Console.ReadLine(), out var interval))
+                interval = 3;
             while (true)
             {
-                //cam.ShowWindow();
-                //var image = Bitmapper.CreateCompressedScreenshot();
-                //SaveImage(image, ImageFormat.Jpeg, "screenshot.jpg");
-
                 var pic = cam2.TakePicture();
                 var picCompressed = Bitmapper.CompressImage(pic);
                 SaveImage(picCompressed, ImageFormat.Jpeg, "webcam.jpg");
-                Wait(30000);
+                Wait((int)(interval * 1000));
             }
         }
 
@@ -50,19 +50,19 @@ namespace Webcammer
             }
         }
 
-        private static void SaveImage(Bitmap image, ImageFormat format, string fileName)
+        private static void SaveImage(Image image, ImageFormat format, string fileName)
         {
             MemoryStream ms = new MemoryStream();// Convert Image to byte[]
             image.Save(ms, format);
-            //byte[] imageBytes = ms.ToArray();
+            byte[] imageBytes = ms.ToArray();
             ms.Seek(0, SeekOrigin.Begin);
-            //File.WriteAllBytes(fileName, imageBytes);
+            File.WriteAllBytes(fileName, imageBytes);
             BlobStorageAzure.BlobStorageManagerAzure bsma = new BlobStorageManagerAzure();
             Task.Run(async () =>
             {
                 await bsma.PublishFile("images", fileName, ms);
                 ms.Dispose();
-                ConsoleWriter.WriteColoredText("Uploaded to server", ConsoleColor.Magenta, ConsoleColor.Cyan);
+                ConsoleWriter.WriteColoredText("Uploaded to server!", ConsoleColor.Magenta, ConsoleColor.Cyan);
             });
         }
     }
