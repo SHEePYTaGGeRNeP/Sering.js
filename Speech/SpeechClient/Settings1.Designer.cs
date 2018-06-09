@@ -73,7 +73,7 @@ namespace SpeechClient {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Ok Google")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Alexa")]
         public string HomeBot {
             get {
                 return ((string)(this["HomeBot"]));

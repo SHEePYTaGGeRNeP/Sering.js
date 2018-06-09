@@ -15,7 +15,7 @@
       <Value Profile="(Default)">https://speechservice1.azurewebsites.net/api/speech/speechmessage/</Value>
     </Setting>
     <Setting Name="HomeBot" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Ok Google</Value>
+      <Value Profile="(Default)">Alexa</Value>
     </Setting>
     <Setting Name="DiscordUrl" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://localhost:8080/bier</Value>
