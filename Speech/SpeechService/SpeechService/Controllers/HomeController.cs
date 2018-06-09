@@ -46,7 +46,7 @@ namespace SpeechService.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetSpeechMessage()
         {
-           HttpResponseMessage message;
+            HttpResponseMessage message;
             string returnMessage = "";
 
             try
@@ -58,12 +58,35 @@ namespace SpeechService.Controllers
                     speechMessage = speechMessages.OrderByDescending(x => x.Key).FirstOrDefault();
                     var test = "";
                     speechMessages.TryRemove(speechMessage.Key, out test);
-                } else
+                }
+                else
                 {
                     return Ok("empty");
                 }
-                
+
                 return Ok(speechMessage.Value);
+            }
+            catch (Exception ex)
+            {
+                message = Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+            catch
+            {
+                message = Request.CreateResponse(HttpStatusCode.BadRequest, "error");
+            }
+
+            return ResponseMessage(message);
+        }
+
+        [Route("speechmessages")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetSpeechMessages()
+        {
+           HttpResponseMessage message;
+         
+            try
+            {
+                return Ok(speechMessages);
             }
             catch (Exception ex)
             {
