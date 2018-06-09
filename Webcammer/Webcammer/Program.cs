@@ -57,7 +57,7 @@ namespace Webcammer
             byte[] imageBytes = ms.ToArray();
             ms.Seek(0, SeekOrigin.Begin);
             File.WriteAllBytes(fileName, imageBytes);
-            BlobStorageAzure.BlobStorageManagerAzure bsma = new BlobStorageManagerAzure();
+            BlobStorageManagerAzure bsma = new BlobStorageManagerAzure();
             Task.Run(async () =>
             {
                 await bsma.PublishFile("images", fileName, ms);
